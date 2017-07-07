@@ -1,8 +1,19 @@
 // define globals
-var weekly_quakes_endpoint = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson";
+console.log('sanity check')
 
-$(document).ready(function() {
+$(document).ready(function () {
   console.log("Let's get coding!");
-  // CODE IN HERE!
 
-});
+  $.ajax({
+    method: 'GET',
+    url: 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson',
+    dataType: 'json',
+    success: onSuccess
+  })
+
+  function onSuccess (dataResponse) {
+    for (i = 0; i <= 25; i++) {
+      $('.earthquakeData').append(`<li>${dataResponse.features[i].properties.title}</li>`)
+    }
+  }
+})
