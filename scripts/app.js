@@ -7,9 +7,7 @@ console.log('sanity check')
 
 // Ready Function
 $(document).ready(function () {
-  console.log('document ready sanity check!')
-  textData()
-  initMap()
+  listQuakeData()
 })
 
 // Create Map Function
@@ -18,33 +16,33 @@ function initMap () {
     center: myLatLng,
     zoom: 2
   })
-  var marker = new google.maps.Marker({
-    position: {
-      lat: 37.791,
-      lng: -122.401},
-    map: map,
-    title: 'Home'
-  })
-};
+}
 
-// Right Column Data Function
-function textData () {
+// Right Column Data Function and Pins
+function listQuakeData (dataResponse) {
   $.ajax({
     method: 'GET',
     url: quakesLink,
     dataType: 'json',
-    success: onSuccess
-  })
+    success: function (dataResponse) {
+      console.log(dataResponse)
 
-  var lat = dataResponse.geometry.coordinates[1]
-  var lng = dataResponse.geometry.coordinates[0]
+      var earthquakes = dataResponse
 
-  function onSuccess (dataResponse) {
-    for (i = 0; i <= 25; i++) {
-      $('.earthquakeData').append(`<li>${dataResponse.features[i].properties.title}</li>`)
-    }
-  }
-}
+      earthquakes.features.forEach(function listRow (quake) {
+        var title = quake.properties.title
+        var thisLng = quake.geometry.coordinates[0]
+        var thisLat = quake.geometry.coordinates[1]
+        var hoursAgo = Math.round((Date.now() - quake.properties.time) / 3600000)
+        $('.earthquakeData').append(`<li>${hoursAgo} hours ago  |  ${title}</li>`)
+        new google.maps.Marker({
+          position: new google.maps.LatLng(thisLat, thisLng),
+          map: map,
+          title: title
+        })
+      })
+    }})
+};
 
 // Google Map
 
