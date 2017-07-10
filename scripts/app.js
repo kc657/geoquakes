@@ -1,6 +1,7 @@
 // Define Globals
 var quakesLink = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson'
 var myLatLng = {lat: 37.791, lng: -122.401}
+var map
 
 // js check
 console.log('sanity check')
@@ -8,6 +9,7 @@ console.log('sanity check')
 // Ready Function
 $(document).ready(function () {
   listQuakeData()
+  initMap()
 })
 
 // Create Map Function
@@ -41,11 +43,6 @@ function listQuakeData (dataResponse) {
           title: title
         })
       })
-    }})
+    }
+  })
 };
-
-// Google Map
-
-// lng ${dataResponse.features[1].geometry.coordinates[0]}
-// lat ${dataResponse.features[1].geometry.coordinates[1]}
-// };
